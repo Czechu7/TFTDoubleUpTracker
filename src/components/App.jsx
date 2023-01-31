@@ -7,30 +7,38 @@ const [searchText, setSearchtext] = useState("");
 const [PlayerData, setPlayerData] = useState({});
 const [selectedRegion, setSelectedRegion] = useState('eun1');
 const [showPlayerData, setShowPlayerData] = useState(false);
-const [error, setError] = useState(false);
+const [noAPIKey, setNoAPIKey] = useState(false);
+const [noPlayerData, setNoPlayerData] = useState(false);
 const API_KEY = '';
 
 function searchForPlayer(event){
 console.log("Szukam: " + searchText);
 const APICallString = "https://"+selectedRegion+".api.riotgames.com/tft/summoner/v1/summoners/by-name/"+ searchText + "?api_key=" + API_KEY;
 
+if (!API_KEY) {
+setNoAPIKey(true);
+return;
+}
+
 axios.get(APICallString).then(function(response){
 //success
 console.log(response.data);
 setPlayerData(response.data);
 setShowPlayerData(true);
-setError(false);
+setNoAPIKey(false);
+setNoPlayerData(false);
 
 }).catch(function(error){
 //error
 console.log(error);
-setError(true);
+setNoPlayerData(true);
 });
 }
 
 console.log(PlayerData);
 
 return (
+
 <div className="app">
 <div className='title'>
 <h5>Double Up Search player</h5>
@@ -44,7 +52,7 @@ return (
 </select>
 <button onClick={e => searchForPlayer(e) }class="btn">Search</button>
 </div>
-{Object.keys(PlayerData).length !== 0 && !error ? 
+{Object.keys(PlayerData).length !== 0 && !noPlayerData ? 
 <>
   <p>Found player data: </p>
   <p>Nick: {PlayerData.name} </p>
@@ -53,12 +61,12 @@ return (
   <p>Account ID: {PlayerData.accountId} </p>
   <p>Summoner ID: {PlayerData.id} </p>
   <p>PUUID: {PlayerData.puuid} </p>
-  
+</>
 
-</> 
-
-: error ? 
-  <><p>No player data/API KEY not filled</p></>
+: noAPIKey ?
+<><p>API KEY not filled</p></>
+: noPlayerData ?
+<><p>No player data</p></>
 : 
 null
 }
