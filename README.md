@@ -25,7 +25,7 @@ Copy code
 npm run dev
 ```
 The application should automatically start in your browser at http://localhost:5173/.
-Usage
+# Usage
 ```
 Before starting the application fill API_KEY in App.jsx using your API KEY from https://developer.riotgames.com/
 ```
