@@ -58,7 +58,7 @@ return (
 </> 
 
 : error ? 
-  <><p>No player data</p></>
+  <><p>No player data/API KEY not filled</p></>
 : 
 null
 }

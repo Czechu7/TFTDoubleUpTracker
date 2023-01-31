@@ -72,33 +72,6 @@ select:hover{
   color: #4ecca3;
 }
 
-.title .text{
-  font-size: 3em;
-  animation:changeColor 1.5s linear infinite;
-}
-.title .brand h1{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 10px;
-}
-.title{
-  text-align: center;
-  margin: -20px 0 10px 0;
-  display: flex;
-  justify-content: center;
-}
-
-.title .brand h1{
-  font-size: 3em;
-  color:#393e46;
-}
-.title .brand h1 span{
-  transition: .15s ease;
-}
-.title .brand h1 span:hover{
-  color: #4ecca3;
-}
 
 .head{
   display: flex;
