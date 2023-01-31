@@ -1,4 +1,4 @@
-# TFTDoubleUpTracker
+# TFT Double Up Tracker
 Teamfight Tactics Double Up Tracker written in ReactJS
 
 
@@ -32,5 +32,5 @@ Before starting the application fill API_KEY in App.jsx using your API KEY from 
 After starting the application, you will be able to test example querry. The URL for the selected region will be displayed on the screen.
 
 
-End
+# End
 Congratulations! You should now be able to run the React project
