@@ -12,7 +12,7 @@ const [noPlayerData, setNoPlayerData] = useState(false);
 const [matchData, setMatchData] = useState([]);
 const [matchGetMatchInfo, setGetMatchInfo] = useState([]);
 const [matchGetMatchMetaData, setGetMatchMetaData] = useState([]);
-const API_KEY = 'RGAPI-8378056d-8097-47b2-9e31-5678e670928a';
+const API_KEY = '';
 
 
 async function getMatchData() {
