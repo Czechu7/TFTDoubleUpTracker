@@ -9,7 +9,51 @@ const [selectedRegion, setSelectedRegion] = useState('eun1');
 const [showPlayerData, setShowPlayerData] = useState(false);
 const [noAPIKey, setNoAPIKey] = useState(false);
 const [noPlayerData, setNoPlayerData] = useState(false);
-const API_KEY = '';
+const [matchData, setMatchData] = useState([]);
+const [matchGetMatchInfo, setGetMatchInfo] = useState([]);
+const [matchGetMatchMetaData, setGetMatchMetaData] = useState([]);
+const API_KEY = 'RGAPI-8378056d-8097-47b2-9e31-5678e670928a';
+
+
+async function getMatchData() {
+  const APICallString = `https://europe.api.riotgames.com/tft/match/v1/matches/by-puuid/${PlayerData.puuid}/ids?count=20&api_key=${API_KEY}`;
+
+  try {
+    const response = await axios.get(APICallString);
+    setMatchData(response.data);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+async function GetMatchInfo() {
+  
+  const APICallString = `https://europe.api.riotgames.com/tft/match/v1/matches/${matchData[0]}?api_key=${API_KEY}`;
+
+  try {
+    const response = await axios.get(APICallString);
+    console.log(response.data);
+    setGetMatchInfo(response.data);
+ 
+  } catch (error) {
+    console.log(error);
+  }
+}
+async function GetMatchMetaData() {
+  
+  const APICallString = `https://europe.api.riotgames.com/tft/match/v1/matches/${matchData[0]}?api_key=${API_KEY}`;
+
+  try {
+    const response = await axios.get(APICallString);
+    console.log(response.data);
+    setGetMatchMetaData(response.data);
+ 
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 
 function searchForPlayer(event){
 console.log("Szukam: " + searchText);
@@ -61,6 +105,30 @@ return (
   <p>Account ID: {PlayerData.accountId} </p>
   <p>Summoner ID: {PlayerData.id} </p>
   <p>PUUID: {PlayerData.puuid} </p>
+  <button onClick={getMatchData}>Get Match Data</button>
+        {matchData.length > 0 ? 
+          <ul>
+            {matchData.map(matchId => (
+              <li key={matchId}>{matchId}</li>
+            ))}
+          </ul>
+          : null
+            }
+  <button onClick={GetMatchInfo}>Get metadata match information</button>
+  {Object.keys(matchGetMatchInfo).length !== 0 && (
+        <div>
+          <p>Metadata:</p>
+          <p>{JSON.stringify(matchGetMatchInfo.metadata)}</p>
+        </div>
+      )}
+       <button onClick={GetMatchMetaData}>Get info match information</button>
+  {Object.keys(matchGetMatchMetaData).length !== 0 && (
+        <div>
+          <p>Metadata:</p>
+          <p>{JSON.stringify(matchGetMatchMetaData.info)}</p>
+        </div>
+      )}
+  
 </>
 
 : noAPIKey ?
@@ -74,4 +142,4 @@ null
 )
 }
 
-export default App
+export default App;

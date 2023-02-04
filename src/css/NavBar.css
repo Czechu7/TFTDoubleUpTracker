@@ -1,0 +1,32 @@
+.navlink {
+    color: var(--bs-nav-link-color);
+    text-decoration: none;
+  }
+  
+  .nav-wrapper {
+    /* margin-left: 0px !important; */
+  }
+  
+  .logo-img {
+    /* margin-right: 5%; */
+  }
+  
+  .navbar-brand {
+    margin-right: 50px;
+  }
+  
+  .navlink {
+    margin: 0 0.5rem;
+  }
+  
+  .navlink:hover {
+    color: white;
+  }
+  
+  .nav-item .dropdown-menu {
+    background-color: transparent
+  }
+  
+  .nav-item .dropdown-menu .dropdown-item {
+    background-color: transparent;
+  }
