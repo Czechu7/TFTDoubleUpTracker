@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
+import "../css/Champions.css"
 function App() {
   const [champions, setChampions] = useState([]);
+  const [selectedChampion, setSelectedChampion] = useState(null);
 
   useEffect(() => {
     axios
@@ -11,7 +12,9 @@ function App() {
         const championData = response.data.data;
         const championArray = Object.values(championData).map((champion) => ({
           name: champion.name,
-          image: `http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/${champion.image.full}`
+          image: `http://ddragon.leagueoflegends.com/cdn/13.3.1/img/champion/${champion.image.full}`,
+          stats: champion.stats,
+          info: champion.info
         }));
         setChampions(championArray);
       })
@@ -19,6 +22,14 @@ function App() {
         console.log(error);
       });
   }, []);
+
+  const handleChampionClick = (champion) => {
+    setSelectedChampion(champion);
+  };
+
+  const handleClosePopup = () => {
+    setSelectedChampion(null);
+  };
 
   return (
     <div>
@@ -33,7 +44,7 @@ function App() {
         </thead>
         <tbody>
           {champions.map((champion, index) => (
-            <tr key={index}>
+            <tr key={index} onClick={() => handleChampionClick(champion)}>
               <td>{index + 1}</td>
               <td>
                 <img src={champion.image} alt={champion.name} />
@@ -43,6 +54,26 @@ function App() {
           ))}
         </tbody>
       </table>
+
+      {selectedChampion && (
+        <div className="popup">
+          <div className="popup-content">
+          <img src={selectedChampion.image} alt={selectedChampion.name} />
+            <h2>{selectedChampion.name}</h2>
+            <div>
+              <p>Obrażenia: {selectedChampion.info.attack}</p>
+              <p>Zdrowie: {selectedChampion.stats.hp}</p>
+              <p>Statystyki bazowe:</p>
+              <ul>
+                <li>Atak: {selectedChampion.stats.attackdamage}</li>
+                <li>Obrona: {selectedChampion.stats.armor}</li>
+                <li>Magia: {selectedChampion.stats.spellblock}</li>
+              </ul>
+            </div>
+            <button onClick={handleClosePopup}>Zamknij</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
