@@ -118,14 +118,14 @@ return (
   {Object.keys(matchGetMatchInfo).length !== 0 && (
         <div>
           <p>Metadata:</p>
-          <p>{JSON.stringify(matchGetMatchInfo.metadata)}</p>
+          <p>{JSON.stringify(matchGetMatchInfo.info)}</p>
         </div>
       )}
-       <button onClick={GetMatchMetaData}>Get info match information</button>
+       <button onClick={GetMatchMetaData}>Get info match metadata</button>
   {Object.keys(matchGetMatchMetaData).length !== 0 && (
         <div>
           <p>Metadata:</p>
-          <p>{JSON.stringify(matchGetMatchMetaData.info)}</p>
+          <p>{JSON.stringify(matchGetMatchMetaData.metadata)}</p>
         </div>
       )}
   

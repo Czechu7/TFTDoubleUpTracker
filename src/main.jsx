@@ -4,10 +4,11 @@ import ReactDOM from 'react-dom/client'
 import App from './components/App'
 import Navigation from './components/Navigation'
 import './index.css'
+import Champions from './components/Champions'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Navigation/>
-    <App />
+    <Champions />
   </React.StrictMode>,
 )
