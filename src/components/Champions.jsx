@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/Champions.css"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 function App() {
   const [champions, setChampions] = useState([]);
   const [selectedChampion, setSelectedChampion] = useState(null);
@@ -25,10 +26,17 @@ function App() {
 
   const handleChampionClick = (champion) => {
     setSelectedChampion(champion);
+    console.log(champion);
   };
 
   const handleClosePopup = () => {
     setSelectedChampion(null);
+  };
+  
+  const handleOverlayClick = (event) => {
+    if (event.target.classList.contains("popup")) {
+      setSelectedChampion(null);
+    }
   };
 
   return (
@@ -56,22 +64,65 @@ function App() {
       </table>
 
       {selectedChampion && (
-        <div className="popup">
-          <div className="popup-content">
-          <img src={selectedChampion.image} alt={selectedChampion.name} />
-            <h2>{selectedChampion.name}</h2>
-            <div>
-              <p>Obrażenia: {selectedChampion.info.attack}</p>
-              <p>Zdrowie: {selectedChampion.stats.hp}</p>
-              <p>Statystyki bazowe:</p>
-              <ul>
-                <li>Atak: {selectedChampion.stats.attackdamage}</li>
-                <li>Obrona: {selectedChampion.stats.armor}</li>
-                <li>Magia: {selectedChampion.stats.spellblock}</li>
-              </ul>
-            </div>
-            <button onClick={handleClosePopup}>Zamknij</button>
-          </div>
+        <div className="popup" onClick={handleOverlayClick} >
+            <div className="popup-content">
+            <img src={selectedChampion.image} alt={selectedChampion.name} />
+          <h2>{selectedChampion.name}</h2>
+          <button onClick={handleClosePopup}>Close</button>
+          <table>
+            <thead>
+              <tr>
+                <th>Level </th>
+                <th>Health </th>
+                <th>Damage </th>
+                <th>Armor </th>
+                <th>Magic Resist </th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(18)].map((_, index) => {
+                const level = index + 1;
+                const stats = selectedChampion.stats;
+                return (
+                  <tr key={level}>
+                    <td>{level}</td>
+                    <td>{Math.round(stats.hp + stats.hpperlevel * level)}</td>
+                    <td>{Math.round(stats.attackdamage + stats.attackdamageperlevel * level)}</td>
+                    <td>{Math.round(stats.armor + stats.armorperlevel * level)}</td>
+                    <td>{Math.round(stats.spellblock + stats.spellblockperlevel * level)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <h2>Statystyki względem poziomu:</h2>
+      <LineChart
+        width={500}
+        height={300}
+        data={[...Array(18)].map((_, index) => {
+          const level = index + 1;
+          const stats = selectedChampion.stats;
+          return {
+            level,
+            health: Math.round(stats.hp + stats.hpperlevel * level),
+            damage: Math.round(stats.attackdamage + stats.attackdamageperlevel * level),
+            armor: Math.round(stats.armor + stats.armorperlevel * level),
+            magicResist: Math.round(stats.spellblock + stats.spellblockperlevel * level),
+          };
+        })}
+        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+      >
+        <XAxis dataKey="level" />
+        <YAxis />
+        <CartesianGrid strokeDasharray="3 3" />
+        <Tooltip />
+        <Legend />
+        <Line type="monotone" dataKey="health" stroke="#8884d8" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="damage" stroke="#82ca9d" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="armor" stroke="#ffc658" activeDot={{ r: 8 }} />
+        <Line type="monotone" dataKey="magicResist" stroke="#ff7300" activeDot={{ r: 8 }} />
+      </LineChart>
+        </div>
         </div>
       )}
     </div>
