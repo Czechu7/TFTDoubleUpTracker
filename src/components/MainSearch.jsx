@@ -2,7 +2,7 @@ import React,{useState} from 'react';
 import '../css/App.css'
 import axios from 'axios'
 
-function App() {
+function MainSearch() {
 const [searchText, setSearchtext] = useState("");
 const [PlayerData, setPlayerData] = useState({});
 const [selectedRegion, setSelectedRegion] = useState('eun1');
@@ -142,4 +142,4 @@ null
 )
 }
 
-export default App;
+export default MainSearch;

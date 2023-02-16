@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../css/Champions.css"
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-function App() {
+function Champions() {
   const [champions, setChampions] = useState([]);
   const [selectedChampion, setSelectedChampion] = useState(null);
 
@@ -129,4 +129,4 @@ function App() {
   );
 }
 
-export default App;
+export default Champions;
