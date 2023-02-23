@@ -5,6 +5,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 function Champions() {
   const [champions, setChampions] = useState([]);
   const [selectedChampion, setSelectedChampion] = useState(null);
+  const [championFilter, setChampionFilter] = useState("");
 
   useEffect(() => {
     axios
@@ -38,10 +39,27 @@ function Champions() {
       setSelectedChampion(null);
     }
   };
+  const handleChampionFilterChange = (event) => {
+    setChampionFilter(event.target.value);
+  };
+
+  const filteredChampions = champions.filter((champion) =>
+    champion.name.toLowerCase().includes(championFilter.toLowerCase())
+  );
 
   return (
     <div>
+      
       <h1>Lista championów:</h1>
+      <div className="filter-container">
+      <input
+        type="text"
+        placeholder="Wyszukaj championa..."
+        value={championFilter}
+        onChange={handleChampionFilterChange}
+      />
+      <hr></hr>
+      </div>
       <table>
         <thead>
           <tr>
@@ -51,7 +69,7 @@ function Champions() {
           </tr>
         </thead>
         <tbody>
-          {champions.map((champion, index) => (
+          {filteredChampions.map((champion, index) => (
             <tr key={index} onClick={() => handleChampionClick(champion)}>
               <td>{index + 1}</td>
               <td>
@@ -63,68 +81,72 @@ function Champions() {
         </tbody>
       </table>
 
+
       {selectedChampion && (
-        <div className="popup" onClick={handleOverlayClick} >
-            <div className="popup-content">
-            <img src={selectedChampion.image} alt={selectedChampion.name} />
-          <h2>{selectedChampion.name}</h2>
-          <button onClick={handleClosePopup}>Close</button>
-          <table>
-            <thead>
-              <tr>
-                <th>Level </th>
-                <th>Health </th>
-                <th>Damage </th>
-                <th>Armor </th>
-                <th>Magic Resist </th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...Array(18)].map((_, index) => {
-                const level = index + 1;
-                const stats = selectedChampion.stats;
-                return (
-                  <tr key={level}>
-                    <td>{level}</td>
-                    <td>{Math.round(stats.hp + stats.hpperlevel * level)}</td>
-                    <td>{Math.round(stats.attackdamage + stats.attackdamageperlevel * level)}</td>
-                    <td>{Math.round(stats.armor + stats.armorperlevel * level)}</td>
-                    <td>{Math.round(stats.spellblock + stats.spellblockperlevel * level)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <h2>Statystyki względem poziomu:</h2>
-      <LineChart
-        width={500}
-        height={300}
-        data={[...Array(18)].map((_, index) => {
-          const level = index + 1;
-          const stats = selectedChampion.stats;
-          return {
-            level,
-            health: Math.round(stats.hp + stats.hpperlevel * level),
-            damage: Math.round(stats.attackdamage + stats.attackdamageperlevel * level),
-            armor: Math.round(stats.armor + stats.armorperlevel * level),
-            magicResist: Math.round(stats.spellblock + stats.spellblockperlevel * level),
-          };
-        })}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
-        <XAxis dataKey="level" />
-        <YAxis />
-        <CartesianGrid strokeDasharray="3 3" />
-        <Tooltip />
-        <Legend />
-        <Line type="monotone" dataKey="health" stroke="#8884d8" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="damage" stroke="#82ca9d" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="armor" stroke="#ffc658" activeDot={{ r: 8 }} />
-        <Line type="monotone" dataKey="magicResist" stroke="#ff7300" activeDot={{ r: 8 }} />
-      </LineChart>
-        </div>
-        </div>
-      )}
+  <div className="popup" onClick={handleOverlayClick} >
+    <div className="popup-content">
+      <img src={selectedChampion.image} alt={selectedChampion.name} />
+      <div className="champion-info">
+        <h2>{selectedChampion.name}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Level </th>
+              <th>Health </th>
+              <th>Damage </th>
+              <th>Armor </th>
+              <th>Magic Resist </th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...Array(18)].map((_, index) => {
+              const level = index + 1;
+              const stats = selectedChampion.stats;
+              return (
+                <tr key={level}>
+                  <td>{level}</td>
+                  <td>{Math.round(stats.hp + stats.hpperlevel * level)}</td>
+                  <td>{Math.round(stats.attackdamage + stats.attackdamageperlevel * level)}</td>
+                  <td>{Math.round(stats.armor + stats.armorperlevel * level)}</td>
+                  <td>{Math.round(stats.spellblock + stats.spellblockperlevel * level)}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <h2>Statystyki względem poziomu:</h2>
+        <LineChart
+          width={500}
+          height={300}
+          data={[...Array(18)].map((_, index) => {
+            const level = index + 1;
+            const stats = selectedChampion.stats;
+            return {
+              level,
+              health: Math.round(stats.hp + stats.hpperlevel * level),
+              damage: Math.round(stats.attackdamage + stats.attackdamageperlevel * level),
+              armor: Math.round(stats.armor + stats.armorperlevel * level),
+              magicResist: Math.round(stats.spellblock + stats.spellblockperlevel * level),
+            };
+          })}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <XAxis dataKey="level" />
+          <YAxis />
+          <CartesianGrid strokeDasharray="3 3" />
+          <Tooltip />
+          <Legend />
+          <Line type="monotone" dataKey="health" stroke="#8884d8" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="damage" stroke="#82ca9d" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="armor" stroke="#ffc658" activeDot={{ r: 8 }} />
+          <Line type="monotone" dataKey="magicResist" stroke="#ff7300" activeDot={{ r: 8 }} />
+        </LineChart>
+      </div>
+      <button onClick={handleClosePopup}>Close</button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

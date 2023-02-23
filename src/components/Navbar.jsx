@@ -29,13 +29,13 @@ function NavBar() {
               <Nav className="mx-auto">
                 <Nav.Link>
                   <NavLink className="navlink" to="/">
-                    Strona główna
+                   | Strona główna  | 
                   </NavLink>
                 </Nav.Link>
 
                 <Nav.Link>
                   <NavLink className="navlink" to="/champions">
-                    Champions
+                    | Champions |
                   </NavLink>
                 </Nav.Link>
                   <NavDropdown.Divider />
